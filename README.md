@@ -25,10 +25,8 @@
 <p align="justify"> 
   This project aims to create a cross-API compatible Android application for the encryption and decryption of various file formats utilizing the Advanced Encryption Standard (AES)
   with 256-bit key length and 128-bit initialization vector. It currently utilizes a user-selected password which is then put through a SHA-256 hash function to convert a 
-  password into the proper length, as well as an MD5 hash function to generate the initialization vector from the user password. AES Encryption occurs in CBC mode for now, with
-  plans to implement GCM mode in the future - While CBC is theoretically fine for the purpose of this app, as data isn't being transmitted over the internet, it is better to err
-  on the side of safety and is one of the planned key improvements to the Encryption/Decryption functions.
-  
+  password into the proper length, as well as an MD5 hash function to generate the initialization vector from the user password. AES Encryption occurs in CBC mode for now. While CBC is not used on the internet often due to lack of authentication, for local files which will not require random access, it is more than secure enough
+  and greatly improves performance on lower-end hardware.
   As of Android API 29 (Android 10), there were numerous new changes brought about, including the requirement to use Scoped Storage file access -- this means that apps no longer
   have the same file access privaleges as they historically did. Unfortunately, many of the new methods used for creating and reading files break on lower API levels, so this
   necessitates the creation of separate read/write functions - one for API's 28 or below and one for API's 29 or above. There are also plans in the future to improve the UI
