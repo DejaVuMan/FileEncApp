@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FileEncApp.Views.MainPage"
+             xmlns:vm="clr-namespace:FileEncApp.ViewModels"
+             Title="{Binding Title}">
+    
+    <ContentPage.BindingContext>
+        <vm:MainPageModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
+                    <Image Source="fencrypt_test.png" VerticalOptions="Center" HeightRequest="64" />
+                </ContentView>
+            </StackLayout>
+        </StackLayout>
+        <ScrollView Grid.Row="1">
+            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10" IsVisible="True">
+                <Label Text="Encrypt and decrypt your files!" FontSize="Title"/>
+                <Label Text="To get started, select the option Encrypt or Decrypt from the left menu, or select a file with the button below:" FontSize="16" Padding="0,0,0,0"/>
+                <Button Text="Pick file" Clicked="Button_Clicked" x:Name="pickButton" />
+                <Image x:Name="resultImage" />
+                <Label x:Name="resultFName" VerticalOptions="FillAndExpand" HorizontalTextAlignment="Center" />
+                <!--TODO: Remove Pick file button from top when selected file, add three buttons on bottom when file selected-->
+                <Button Text="" Clicked="EncDecButton_Clicked" x:Name="EncDecButton" IsVisible="False" />
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>
