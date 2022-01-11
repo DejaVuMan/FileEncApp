@@ -24,8 +24,7 @@
 
 <p align="justify"> 
   This project aims to create a cross-API compatible Android application for the encryption and decryption of various file formats utilizing the Advanced Encryption Standard (AES)
-  with 256-bit key length and 128-bit initialization vector. It currently utilizes a user-selected password which is then put through a SHA-256 hash function to convert a 
-  password into the proper length, as well as an MD5 hash function to generate the initialization vector from the user password. AES Encryption occurs in CBC mode for now. While CBC is not used on the internet often due to lack of authentication, for local files which will not require random access, it is more than secure enough
+  with 256-bit key length and 128-bit initialization vector. It currently utilizes a user-selected password which is put through a PKDF2 password-based key derivation function, a SHA-256 hash function, as well as an MD5 hash function to generate the initialization vector from the user password. AES Encryption occurs in CBC mode for now. While CBC is not used on the internet often due to lack of authentication, for local files which will not require random access, it is more than secure enough
   and greatly improves performance on lower-end hardware.
   As of Android API 29 (Android 10), there were numerous new changes brought about, including the requirement to use Scoped Storage file access -- this means that apps no longer
   have the same file access privaleges as they historically did. Unfortunately, many of the new methods used for creating and reading files break on lower API levels, so this
@@ -34,6 +33,29 @@
 </p>
 
 <p align="center">
-  <img src="readmeresources/CBC_encryption.png" alt="Image describing CBC-mode for AES Encryption" width="50%" height="50%">        
-  <!--figcaption>Caption goes here</figcaption-->
+  <img src="readmeresources/CBC_encryption.png" alt="Image describing CBC-mode for AES Encryption" width="50%" height="50%">
+</p>
+
+<!-- PREREQUISITES -->
+<h2 id="prerequisites"> :safety_vest: Prerequisites</h2>
+
+<p align="justify"> 
+  Currently, the project code has only been completed and tested on some Android devices, so an Android device running at least API Level 21
+  (Android Lollipop, 5.0.0+) is required. Older Android devices may or may not work! You should ideally target Android 11 (API Level 30).
+  
+  If you want to clone and refactor or improve the code on your own end, you must ensure that your dev environment has 
+  <a href="https://dotnet.microsoft.com/en-us/apps/xamarin">Xamarin</a> support. If you don't want to build the .APK file yourself, you should use
+  the <a href="https://docs.microsoft.com/en-us/xamarin/android/get-started/installation/android-emulator/device-manager?tabs=windows&pivots=windows">Android Device Manager</a> to emulate your desired device.
+</p>
+
+
+<!-- ROADMAP -->
+<h2 id="roadmap"> :world_map: Roadmap</h2>
+<p align="justify"> 
+  The project is still in an early stage, where a focus on improving or completing core functionalities is most important. While core functionalities for encryption
+  have been implemented, there are various UI/UX tweaks to be done, as well as additional testing on various devices. Review of core functionalities by those     knowlegeable in cryptography is also required.
+</p>
+
+<p align="center">
+  <img src="readmeresources/roadmap_file_enc_app.drawio.png" alt="Image describing current placeholder roadmap.">
 </p>
