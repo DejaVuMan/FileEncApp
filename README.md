@@ -40,7 +40,7 @@
 <h2 id="prerequisites"> :safety_vest: Prerequisites</h2>
 
 <p align="justify"> 
-  Currently, the project code has only been completed and tested on some Android devices, so an Android device running at least API Level 21
+  Currently, the project code has only been completed and tested on some (read: 3 emulated) Android devices, so an Android device running at least API Level 21
   (Android Lollipop, 5.0.0+) is required. Older Android devices may or may not work! You should ideally target Android 11 (API Level 30).
   
   If you want to clone and refactor or improve the code on your own end, you must ensure that your dev environment has 
