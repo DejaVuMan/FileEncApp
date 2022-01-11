@@ -30,7 +30,10 @@ namespace FileEncApp.Droid
         /// <summary>
         /// Write file to app directory.
         /// </summary>
-        /// <param name="contents">CryptoStream passed which we write to file</param>
+        /// <param name="filePath">Location of original file which we pass as input to AES functions</param>
+        /// <param name="pass">password which AES function will work on</param>
+        /// <param name="fileName">File name of original file which we append .aes to and use as
+        /// part of file creation parameters for the final encrypted/decrypted file</param>
         /// <returns>Worked</returns>
         public bool ExportFile(string filePath, string pass, string fileName)
         {
