@@ -33,11 +33,11 @@ namespace FileEncApp.Services
             {
                 if(DeviceInfo.Version.Major < 10)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Writing File Data", "File was succesfully Encrypted in root directory under folder name: Encrypted Files", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Writing File Data", "File was successfully Encrypted in root directory under folder name: Encrypted Files", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Writing File Data", "File was succesfully Encrypted in app's directory under folder name: Encrypted Files", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Writing File Data", "File was successfully Encrypted in the Documents directory under folder name: Encrypted Files", "OK");
                 }
             }
             else
@@ -65,11 +65,11 @@ namespace FileEncApp.Services
             {
                 if(DeviceInfo.Version.Major < 10)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Reading File Data", "File was succesfully Decrypted in root directory under folder name: Decrypted Files. Don't forget to remove the original file!", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Reading File Data", "File was successfully Decrypted in root directory under folder name: Decrypted Files. Don't forget to remove the original file!", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Writing File Data", "File was succesfully Decrypted in app's directory under folder name: Decrypted Files. Don't forget to remove the original file!", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Writing File Data", "File was successfully Decrypted in Documents directory under folder name: Decrypted Files. Don't forget to remove the original file!", "OK");
                 }
             }
             else

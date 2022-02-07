@@ -93,8 +93,8 @@ namespace FileEncApp.Droid
 
         private bool WriteAPI29AndAbove(string filePath, string pass, string fileName)
         {
-            // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in app directory instead.
-            var filePathDir = Path.Combine(Android.App.Application.Context.GetExternalFilesDir(null).AbsolutePath, "Encrypted Files"); // get Private Public folder
+            // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in the Documents directory instead.
+            var filePathDir = Path.Combine("/storage/emulated/0/Documents", "Encrypted Files"); // get Private Public folder
 
             if (!File.Exists(filePathDir))
             {
@@ -186,8 +186,8 @@ namespace FileEncApp.Droid
         }
         private bool ReadAPI29AndAbove(string filePath, string pass, string fileName)
         {
-            // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in app directory instead.
-            var filePathDir = Path.Combine(Android.App.Application.Context.GetExternalFilesDir(null).AbsolutePath, "Decrypted Files"); // get Private Public folder
+            // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in documents directory instead.
+            var filePathDir = Path.Combine("/storage/emulated/0/Documents", "Decrypted Files"); // get Private Public folder
 
             if (!File.Exists(filePathDir))
             {
