@@ -15,6 +15,9 @@ namespace FileEncApp
 
             DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
+
+            // Get the current theme
+            //OSAppTheme currentTheme = Application.Current.RequestedTheme; // returns "Light" or "Dark"
         }
 
         protected override void OnStart()

@@ -68,13 +68,9 @@ namespace FileEncApp.Droid
                         }
                     }
                 }
-                System.Diagnostics.Debug.WriteLine("Encrypted file creation succeeded. filePath: " + filespec);
             }
-            catch (Exception ex)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine("Failed file write. Passed in filePath: " + filePath + ". Full filespec: " + filespec);
-                System.Diagnostics.Debug.WriteLine("The following Exception occurred: " + ex.Message);
-                System.Diagnostics.Debug.Flush();
                 return false;
             }
             return true;
@@ -129,13 +125,9 @@ namespace FileEncApp.Droid
                         }
                     }
                 }
-                System.Diagnostics.Debug.WriteLine("Decrypted file creation succeeded. filePath: " + filespec);
             }
-            catch(Exception ex)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine("Failed file write. Passed in filePath: " + filePath + ". Full filespec: " + filespec);
-                System.Diagnostics.Debug.WriteLine("The following Exception occurred: " + ex.Message);
-                System.Diagnostics.Debug.Flush();
                 return false;
             }
             return true;

@@ -35,10 +35,15 @@ namespace FileEncApp.Views
                 // result.FullPath = "/storage/emulated/0/Android/data/com.companyname.fileencapp/cache/2203693cc04e0be7f4f024d5f9499e13/2959b26c877a43dcaf0a0f0aad59f971/test.jpg"
 
                 var stream = await result.OpenReadAsync();
+                MemoryStream ImageStream = new MemoryStream();
+                stream.CopyTo(ImageStream);
+                stream.Dispose(); // bypass issue where async stream can spontaneously dispose
+
                 if (name.EndsWith("jpg", StringComparison.OrdinalIgnoreCase))
                 {
-                    
-                    resultImage.Source = ImageSource.FromStream(() => stream);
+                    ImageStream.Position = 0;
+                    var byteArray = ImageStream.ToArray();
+                    resultImage.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
                 }
                 else if (name.EndsWith("txt", StringComparison.OrdinalIgnoreCase))
                 {

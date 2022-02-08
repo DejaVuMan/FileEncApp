@@ -75,14 +75,9 @@ namespace FileEncApp.Droid
                 try
                 {
                     newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
                     return false;
                 }
             }
@@ -99,8 +94,6 @@ namespace FileEncApp.Droid
             if (!File.Exists(filePathDir))
             {
                 Directory.CreateDirectory(filePathDir);
-                System.Diagnostics.Debug.WriteLine("New file directory created: " + filePathDir);
-                System.Diagnostics.Debug.Flush();
             }
 
             string filespec = Path.Combine(filePathDir, fileName + ".aes");
@@ -112,15 +105,9 @@ namespace FileEncApp.Droid
                 try
                 {
                     newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
                     return false;
                 }
             }
@@ -169,14 +156,9 @@ namespace FileEncApp.Droid
                 try
                 {
                     newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
                     return false;
                 }
             }
@@ -192,8 +174,6 @@ namespace FileEncApp.Droid
             if (!File.Exists(filePathDir))
             {
                 Directory.CreateDirectory(filePathDir);
-                System.Diagnostics.Debug.WriteLine("New file directory created: " + filePathDir);
-                System.Diagnostics.Debug.Flush();
             }
 
             fileName = fileName.Remove(fileName.LastIndexOf('.'));
@@ -207,15 +187,9 @@ namespace FileEncApp.Droid
                 try
                 {
                     newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
                     return false;
                 }
             }
