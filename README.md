@@ -57,5 +57,5 @@
 </p>
 
 <p align="center">
-  <img src="readmeresources/roadmap_file_enc_app.drawio.png" alt="Image describing current placeholder roadmap.">
+  <img src="readmeresources/roadmap_file_enc_app_2.drawio.png" alt="Image describing current placeholder roadmap.">
 </p>
