@@ -29,23 +29,38 @@ namespace FileEncApp.Views
                 PickerTitle = "Select a file"
                 });
 
+            var fileTypes = FilePickerFileType.Images;
+
             if (result != null) // if something is indeed chosen
             {
                 var name = result.FileName;
                 var fullPath = result.FullPath;
-                // ^^^ will most likely return a sandboxed path, i.e,
-                // result.FullPath = "/storage/emulated/0/Android/data/com.companyname.fileencapp/cache/2203693cc04e0be7f4f024d5f9499e13/2959b26c877a43dcaf0a0f0aad59f971/test.jpg"
 
-                var stream = await result.OpenReadAsync();
-                MemoryStream ImageStream = new MemoryStream();
-                stream.CopyTo(ImageStream);
-                stream.Dispose(); // bypass issue where async stream can spontaneously dispose
+                String[] imageEndsWith = {".tif", ".tiff", ".bmp", ".jpg", ".jpeg", ".gif", ".png"};
 
-                if (name.EndsWith("jpg", StringComparison.OrdinalIgnoreCase))
+                bool isImage = false;
+
+                foreach(string img in imageEndsWith)
                 {
+                    if(name.EndsWith(img, StringComparison.OrdinalIgnoreCase))
+                    {
+                        isImage = true;
+                        break;
+                    }
+                    isImage = false;
+                }
+
+                if (isImage)
+                {
+                    var stream = await result.OpenReadAsync();
+                    MemoryStream ImageStream = new MemoryStream();
+                    stream.CopyTo(ImageStream);
+                    stream.Dispose(); // bypass issue where async stream can spontaneously dispose
+
                     ImageStream.Position = 0;
                     var byteArray = ImageStream.ToArray();
                     resultImage.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
+                    ImageStream.Dispose();
                 }
                 else if (name.EndsWith("txt", StringComparison.OrdinalIgnoreCase))
                 {
@@ -55,8 +70,10 @@ namespace FileEncApp.Views
                 {
                     resultImage.Source = ImageSource.FromFile("encrypted_icon.png");
                 }
-
-                ImageStream.Dispose();
+                else
+                {
+                    resultImage.Source = ImageSource.FromFile("question_icon.png");
+                }
 
                 resultFName.Text = name;
                 pickButton.Text = "Pick different file";
