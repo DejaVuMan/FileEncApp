@@ -40,8 +40,7 @@
 <h2 id="prerequisites"> :safety_vest: Prerequisites</h2>
 
 <p align="justify"> 
-  Currently, the project code has only been completed and tested on some (read: 3 emulated) Android devices, so an Android device running at least API Level 21
-  (Android Lollipop, 5.0.0+) is required. Older Android devices may or may not work! You should ideally target Android 11 (API Level 30).
+  Currently, the project code has been tested on a number of Android devices(Huawei Mate 9, P30 Pro, OnePlus 8, 8T, Google Pixel 2), so an Android device running at least API Level 21 (Android Lollipop, 5.0.0+) is required. Older Android devices may or may not work! You should ideally target Android 11 (API Level 30).
   
   If you want to clone and refactor or improve the code on your own end, you must ensure that your dev environment has 
   <a href="https://dotnet.microsoft.com/en-us/apps/xamarin">Xamarin</a> support. If you don't want to build the .APK file yourself, you should use
@@ -52,10 +51,9 @@
 <!-- ROADMAP -->
 <h2 id="roadmap"> :world_map: Roadmap</h2>
 <p align="justify"> 
-  The project is still in an early stage, where a focus on improving or completing core functionalities is most important. While core functionalities for encryption
-  have been implemented, there are various UI/UX tweaks to be done, as well as additional testing on various devices. Review of core functionalities by those     knowlegeable in cryptography is also required.
+  The project has reached the stage where core functionalities have been finally implemented successfully, but there is still a focus on improving these functionalities
+  based on user feedback from a limited rollout closed beta. Most big UI/UX tweaks have been made, with some more potentially possible in the future, as well as additional testing on various devices. Review of core functionalities by those knowlegeable in cryptography has begun, where based on their feedback, some functions could be improved.
 </p>
-
 <p align="center">
   <img src="readmeresources/roadmap_file_enc_app_2.drawio.png" alt="Image describing current placeholder roadmap.">
 </p>
