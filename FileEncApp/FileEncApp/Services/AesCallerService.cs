@@ -11,7 +11,7 @@ using Xamarin.Essentials;
 
 namespace FileEncApp.Services
 {
-    class aesCaller
+    class AesCallerService
     {
         private ExportService exportInfo;
         public async Task EncryptFile(string filePath, string pass, string fileName)

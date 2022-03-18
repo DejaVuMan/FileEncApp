@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FileEncApp.Views.MainPage"
              xmlns:vm="clr-namespace:FileEncApp.ViewModels"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             >
     
     <ContentPage.BindingContext>
         <vm:MainPageModel />
@@ -11,16 +12,17 @@
     
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="AccentPrimary">#96d1ff</Color>
+            <Color x:Key="AccentSecondary">#435766</Color>
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid BackgroundColor="{AppThemeBinding Light=White, Dark=#070b15}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+        <StackLayout BackgroundColor="{AppThemeBinding Light={StaticResource AccentPrimary}, Dark={StaticResource AccentSecondary}}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
                     <Image Source="fencrypt_test.png" VerticalOptions="Center" HeightRequest="64" />
@@ -29,8 +31,8 @@
         </StackLayout>
         <ScrollView Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10" IsVisible="True">
-                <Label Text="Encrypt and decrypt your files!" FontSize="Title"/>
-                <Label Text="To get started, select the option Encrypt or Decrypt from the left menu, or select a file with the button below:" FontSize="16" Padding="0,0,0,0"/>
+                <Label Text="Encrypt and decrypt your files!" FontSize="Title" TextColor="{AppThemeBinding Light=Gray, Dark=#b3b6b7}"/>
+                <Label Text="To get started, select the option Encrypt or Decrypt from the left menu, or select a file with the button below:" FontSize="16" Padding="0,0,0,0" TextColor="{AppThemeBinding Light=Gray, Dark=#b3b6b7}"/>
                 <Button Text="Pick file" Clicked="Button_Clicked" x:Name="pickButton" />
                 <Image x:Name="resultImage" />
                 <Label x:Name="resultFName" VerticalOptions="FillAndExpand" HorizontalTextAlignment="Center" />

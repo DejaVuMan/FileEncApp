@@ -3,6 +3,9 @@ using System;
 using System.IO;
 using FileEncApp.Interfaces;
 using Xamarin.Essentials;
+using Android.Content;
+using Plugin.CurrentActivity;
+using System.Text;
 
 [assembly: Xamarin.Forms.Dependency(typeof(FileEncApp.Droid.CryptoReadWrite))]
 namespace FileEncApp.Droid
@@ -41,6 +44,7 @@ namespace FileEncApp.Droid
 
             // After version 10 (API 29), we are not allowed to write directly to a public directory (DCIM, Download, etc).
             // We must utilize the MediaStore API due to security changes and scoped file access.
+            // Version 11 (API 30) seems to revert some of these requirements and allows writing only inside of public dirs.
 
             if (version.Major < 10)
             {
@@ -48,8 +52,9 @@ namespace FileEncApp.Droid
             }
             else
             {
-                return WriteAPI29AndAbove(filePath, pass, fileName);
+                return WriteAPI29(filePath, pass, fileName);
             }
+
         }
 
         [TargetApi(Value = 28)]
@@ -75,14 +80,9 @@ namespace FileEncApp.Droid
                 try
                 {
                     newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
                     return false;
                 }
             }
@@ -91,41 +91,23 @@ namespace FileEncApp.Droid
             return result;
         }
 
-        private bool WriteAPI29AndAbove(string filePath, string pass, string fileName)
+        private bool WriteAPI29(string filePath, string pass, string fileName)
         {
-            // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in the Documents directory instead.
-            var filePathDir = Path.Combine("/storage/emulated/0/Documents", "Encrypted Files"); // get Private Public folder
+            ContentValues contentValues = new ContentValues();
+            contentValues.Put(Android.Provider.MediaStore.IMediaColumns.DisplayName, fileName + ".aes");
+            Console.WriteLine(Android.OS.Environment.DirectoryDocuments);
+            contentValues.Put(Android.Provider.MediaStore.IMediaColumns.RelativePath,"Documents/Encrypted Files");
+            contentValues.Put(Android.Provider.MediaStore.IMediaColumns.MimeType, "application/octet-stream");
 
-            if (!File.Exists(filePathDir))
-            {
-                Directory.CreateDirectory(filePathDir);
-                System.Diagnostics.Debug.WriteLine("New file directory created: " + filePathDir);
-                System.Diagnostics.Debug.Flush();
-            }
+            Context context = Android.App.Application.Context;
 
-            string filespec = Path.Combine(filePathDir, fileName + ".aes");
+            Android.Net.Uri uri = context.ContentResolver.Insert(Android.Provider.MediaStore.Files.GetContentUri("external"), contentValues);
+            Stream outputStream = context.ContentResolver.OpenOutputStream(uri);
 
-            FileInfo newFile = new FileInfo(filespec);
-
-            if (newFile.Exists)
-            {
-                try
-                {
-                    newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
-                    return false;
-                }
-            }
             var aesMagic = new CryptKeeper(); // call on it from CryptKeeper class
-            bool result = aesMagic.Encryptor(filePath, pass, filespec);
+            bool result = aesMagic.ScopedStorageEncryptor(filePath, pass, outputStream);
+            outputStream.Close();
+
             return result;
         }
 
@@ -142,7 +124,7 @@ namespace FileEncApp.Droid
             }
             else
             {
-                return ReadAPI29AndAbove(filePath, pass, fileName);
+                return ReadAPI29(filePath, pass, fileName);
             }
         }
 
@@ -169,14 +151,9 @@ namespace FileEncApp.Droid
                 try
                 {
                     newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
                     return false;
                 }
             }
@@ -184,45 +161,25 @@ namespace FileEncApp.Droid
             bool result = aesMagic.Decryptor(filePath, pass, filespec);
             return result;
         }
-        private bool ReadAPI29AndAbove(string filePath, string pass, string fileName)
+
+        private bool ReadAPI29(string filePath, string pass, string fileName)
         {
-            // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in documents directory instead.
-            var filePathDir = Path.Combine("/storage/emulated/0/Documents", "Decrypted Files"); // get Private Public folder
+            fileName = fileName.Remove(fileName.LastIndexOf('.')); // remove ".AES" from end of file
+            ContentValues contentValues = new ContentValues();
+            contentValues.Put(Android.Provider.MediaStore.IMediaColumns.DisplayName, fileName);
+            Console.WriteLine(Android.OS.Environment.DirectoryDocuments);
+            contentValues.Put(Android.Provider.MediaStore.IMediaColumns.RelativePath, "Documents/Decrypted Files");
+            contentValues.Put(Android.Provider.MediaStore.IMediaColumns.MimeType, "application/octet-stream");
 
-            if (!File.Exists(filePathDir))
-            {
-                Directory.CreateDirectory(filePathDir);
-                System.Diagnostics.Debug.WriteLine("New file directory created: " + filePathDir);
-                System.Diagnostics.Debug.Flush();
-            }
+            Context context = Android.App.Application.Context;
 
-            fileName = fileName.Remove(fileName.LastIndexOf('.'));
+            Android.Net.Uri uri = context.ContentResolver.Insert(Android.Provider.MediaStore.Files.GetContentUri("external"), contentValues);
+            Stream outputStream = context.ContentResolver.OpenOutputStream(uri);
 
-            string filespec = Path.Combine(filePathDir, fileName);
-
-            FileInfo newFile = new FileInfo(filespec);
-
-            if (newFile.Exists)
-            {
-                try
-                {
-                    newFile.Delete(); //overwrite file with existing file name - TODO: iterate with appended (i) to end until unique
-
-                    System.Diagnostics.Debug.WriteLine("Existing file was deleted: " + filespec);
-                    System.Diagnostics.Debug.Flush();
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Failed to delete existing filespec: " + fileName);
-                    System.Diagnostics.Debug.WriteLine("The following exception occurred: " + ex.Message);
-                    System.Diagnostics.Debug.Flush();
-                    return false;
-                }
-            }
             var aesMagic = new CryptKeeper(); // call on it from CryptKeeper class
-            bool result = aesMagic.Decryptor(filePath, pass, filespec);
+            bool result = aesMagic.ScopedStorageDecryptor(filePath, pass, outputStream);
+            outputStream.Close();
             return result;
         }
-        // implement logic in UI side
     }
 }

@@ -5,9 +5,11 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Collections.Generic;
+using Xamarin.Forms.Internals;
 
 namespace FileEncApp.Views
 {
+    [Preserve(AllMembers = true)]
     public partial class MainPage : ContentPage
     {
         public MainPage()
@@ -27,28 +29,51 @@ namespace FileEncApp.Views
                 PickerTitle = "Select a file"
                 });
 
+            var fileTypes = FilePickerFileType.Images;
+
             if (result != null) // if something is indeed chosen
             {
                 var name = result.FileName;
                 var fullPath = result.FullPath;
-                // ^^^ will most likely return a sandboxed path, i.e,
-                // result.FullPath = "/storage/emulated/0/Android/data/com.companyname.fileencapp/cache/2203693cc04e0be7f4f024d5f9499e13/2959b26c877a43dcaf0a0f0aad59f971/test.jpg"
 
-                var stream = await result.OpenReadAsync();
-                if (name.EndsWith("jpg", StringComparison.OrdinalIgnoreCase))
+                String[] imageEndsWith = {".tif", ".tiff", ".bmp", ".jpg", ".jpeg", ".gif", ".png"};
+
+                bool isImage = false;
+
+                foreach(string img in imageEndsWith)
                 {
-                    
-                    resultImage.Source = ImageSource.FromStream(() => stream);
+                    if(name.EndsWith(img, StringComparison.OrdinalIgnoreCase))
+                    {
+                        isImage = true;
+                        break;
+                    }
+                    isImage = false;
+                }
+
+                if (isImage)
+                {
+                    var stream = await result.OpenReadAsync();
+                    MemoryStream ImageStream = new MemoryStream();
+                    stream.CopyTo(ImageStream);
+                    stream.Dispose(); // bypass issue where async stream can spontaneously dispose
+
+                    ImageStream.Position = 0;
+                    var byteArray = ImageStream.ToArray();
+                    resultImage.Source = ImageSource.FromStream(() => new MemoryStream(byteArray));
+                    ImageStream.Dispose();
                 }
                 else if (name.EndsWith("txt", StringComparison.OrdinalIgnoreCase))
                 {
-                    resultImage.Source = ImageSource.FromFile("text_icon.png");
+                    resultImage.Source = ImageSource.FromFile("text_icon.png"); // load different image if dark background
                 }
                 else if(name.EndsWith("aes", StringComparison.OrdinalIgnoreCase))
                 {
                     resultImage.Source = ImageSource.FromFile("encrypted_icon.png");
                 }
-                stream.Close();
+                else
+                {
+                    resultImage.Source = ImageSource.FromFile("question_icon.png");
+                }
 
                 resultFName.Text = name;
                 pickButton.Text = "Pick different file";
@@ -73,7 +98,7 @@ namespace FileEncApp.Views
 
         async void EncDecButton_Clicked(object sender, EventArgs e)
         {
-            FileEncApp.Services.aesCaller aesHelper = new FileEncApp.Services.aesCaller(); // call on aesHelper functions from external file
+            FileEncApp.Services.AesCallerService aesHelper = new FileEncApp.Services.AesCallerService(); // call on aesHelper functions from external file
             if (filePath.Contains(".aes"))
             {
                 string rawPass = await DisplayPromptAsync("Decryption Password", "Please enter the password you used for decryption.");
