@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Android.Util;
 
 namespace FileEncApp.Droid
 {
@@ -69,8 +70,9 @@ namespace FileEncApp.Droid
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine("Whoops! An error occurred in FileEncApp: " + e);
                 return false;
             }
             return true;
@@ -126,8 +128,9 @@ namespace FileEncApp.Droid
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine("Whoops! An error occurred in FileEncApp: " + e); // error most likely not here
                 return false;
             }
             return true;

@@ -5,9 +5,11 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Collections.Generic;
+using Xamarin.Forms.Internals;
 
 namespace FileEncApp.Views
 {
+    [Preserve(AllMembers = true)]
     public partial class MainPage : ContentPage
     {
         public MainPage()
@@ -47,13 +49,14 @@ namespace FileEncApp.Views
                 }
                 else if (name.EndsWith("txt", StringComparison.OrdinalIgnoreCase))
                 {
-                    resultImage.Source = ImageSource.FromFile("text_icon.png");
+                    resultImage.Source = ImageSource.FromFile("text_icon.png"); // load different image if dark background
                 }
                 else if(name.EndsWith("aes", StringComparison.OrdinalIgnoreCase))
                 {
                     resultImage.Source = ImageSource.FromFile("encrypted_icon.png");
                 }
-                stream.Close();
+
+                ImageStream.Dispose();
 
                 resultFName.Text = name;
                 pickButton.Text = "Pick different file";
@@ -78,7 +81,7 @@ namespace FileEncApp.Views
 
         async void EncDecButton_Clicked(object sender, EventArgs e)
         {
-            FileEncApp.Services.aesCaller aesHelper = new FileEncApp.Services.aesCaller(); // call on aesHelper functions from external file
+            FileEncApp.Services.AesCallerService aesHelper = new FileEncApp.Services.AesCallerService(); // call on aesHelper functions from external file
             if (filePath.Contains(".aes"))
             {
                 string rawPass = await DisplayPromptAsync("Decryption Password", "Please enter the password you used for decryption.");

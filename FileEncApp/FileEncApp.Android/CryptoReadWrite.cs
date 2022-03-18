@@ -48,7 +48,7 @@ namespace FileEncApp.Droid
             }
             else
             {
-                return WriteAPI29AndAbove(filePath, pass, fileName);
+                return WriteAPI30AndAbove(filePath, pass, fileName);
             }
         }
 
@@ -86,14 +86,17 @@ namespace FileEncApp.Droid
             return result;
         }
 
-        private bool WriteAPI29AndAbove(string filePath, string pass, string fileName)
+        private bool WriteAPI30AndAbove(string filePath, string pass, string fileName)
         {
             // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in the Documents directory instead.
             var filePathDir = Path.Combine("/storage/emulated/0/Documents", "Encrypted Files"); // get Private Public folder
+            System.Diagnostics.Debug.WriteLine(filePathDir);
+            System.Diagnostics.Debug.Flush();
 
             if (!File.Exists(filePathDir))
             {
-                Directory.CreateDirectory(filePathDir);
+
+                Directory.CreateDirectory(filePathDir); // will throw UnauthorizedAccessException on Android API 29 only???
             }
 
             string filespec = Path.Combine(filePathDir, fileName + ".aes");
@@ -129,7 +132,7 @@ namespace FileEncApp.Droid
             }
             else
             {
-                return ReadAPI29AndAbove(filePath, pass, fileName);
+                return ReadAPI30AndAbove(filePath, pass, fileName);
             }
         }
 
@@ -166,10 +169,10 @@ namespace FileEncApp.Droid
             bool result = aesMagic.Decryptor(filePath, pass, filespec);
             return result;
         }
-        private bool ReadAPI29AndAbove(string filePath, string pass, string fileName)
+        private bool ReadAPI30AndAbove(string filePath, string pass, string fileName)
         {
-            // In Android 29, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in documents directory instead.
-            var filePathDir = Path.Combine("/storage/emulated/0/Documents", "Decrypted Files"); // get Private Public folder
+            // In Android 30, we are not allowed to create a new folder in the root public directory - we will store files in a folder w/in documents directory instead.
+            var filePathDir = Path.Combine("/storage/emulated/0/Documents", "Decrypted Files");
 
             if (!File.Exists(filePathDir))
             {
@@ -197,6 +200,5 @@ namespace FileEncApp.Droid
             bool result = aesMagic.Decryptor(filePath, pass, filespec);
             return result;
         }
-        // implement logic in UI side
     }
 }
