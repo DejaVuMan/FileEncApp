@@ -1,6 +1,7 @@
 ﻿using FileEncApp.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,28 +13,27 @@ namespace FileEncApp.Services
 
         public MockDataStore()
         {
-            items = new List<Item>()
+            items = new List<Item>();
+            // new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." }
+            var folderPathDir = Path.Combine("/storage/emulated/0/Documents", "Encrypted Files");
+            String[] temp = Directory.GetFiles(folderPathDir);
+
+            if(temp.Length > 0)
             {
-                new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
-            };
-        }
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    items.Add(new Item { Id = Guid.NewGuid().ToString(), Text = temp[i].Split(Path.DirectorySeparatorChar).Last(), Description = temp[i] });
+                }
+            }
+            else
+            {
+                items.Add(new Item { Id = Guid.NewGuid().ToString(), Text = "No files found!", Description = "Encrypt some files first before they get listed here." });
+            }
+
+        } // TODO: Consider functionality where clicking on items calls on password entry and file decryption? Big overhaul of MockDataStore
 
         public async Task<bool> AddItemAsync(Item item)
         {
-            items.Add(item);
-
-            return await Task.FromResult(true);
-        }
-
-        public async Task<bool> UpdateItemAsync(Item item)
-        {
-            var oldItem = items.Where((Item arg) => arg.Id == item.Id).FirstOrDefault();
-            items.Remove(oldItem);
             items.Add(item);
 
             return await Task.FromResult(true);
@@ -47,8 +47,9 @@ namespace FileEncApp.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        public async Task<Item> GetItemAsync(string id) // clicking on entry calls this
         {
+            
             return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
         }
 
